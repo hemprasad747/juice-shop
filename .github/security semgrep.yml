@@ -1,0 +1,39 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Use the Node.js version that suits your project
+
+      - name: Install dependencies
+        run: npm install  # Adjust based on your package manager (npm, yarn, etc.)
+
+      - name: Install Semgrep
+        run: |
+          npm install -g semgrep
+
+      - name: Run Semgrep
+        run: |
+          semgrep --config auto .
+          
+      - name: Build Project
+        run: npm run build  # Replace with your build command if necessary
+
+      - name: Run Tests
+        run: npm test  # Replace with your test command if necessary
